@@ -33,5 +33,6 @@ for i in range(270):
     plt.draw()
     plt.pause(0.001)
 
+# plt.ioff()
 # plt.imshow(field, interpolation='none')
 # plt.show()
