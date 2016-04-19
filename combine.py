@@ -11,7 +11,7 @@ class Combine:
         self.way = []
         self.current_cells = 0
         self.extracted_cells = []
-        self.in_shaft = True
+        self.in_shaft = False
         if i != -1:
             self.capacity = conf.combine_capacity[i]
             self.move_cost = conf.combine_move_cost[i]

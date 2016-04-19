@@ -12,16 +12,19 @@ field = None
 def init():
     global field, combines
     field = fieldgen.get_field()
-    for comb_shaft in conf.combines_shafts:
-        combines.append(Combine(conf.shafts[comb_shaft], field))
+    for i in range(conf.combines_num):
+        combines.append(Combine(conf.shafts[conf.combines_shafts[i]], field, i))
 
 
 def main():
     init()
-
-    plt.imshow(field, interpolation='none')
+    for _ in range(conf.days):
+        for i in range(conf.combines_max_speed):
+            for combine in combines:
+                combine.move()
+    # plt.imshow(field, interpolation='none')
     # plt.ion()
-    plt.show()
+    # plt.show()
 
 
 if __name__ == '__main__':

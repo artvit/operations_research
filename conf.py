@@ -13,6 +13,7 @@ combines_shafts = [0]
 combine_capacity = [1000]
 combine_move_cost = [40]
 combine_speed = [10]
+combines_max_speed = max(combine_speed)
 
 combines_num = len(combines_shafts)
 
