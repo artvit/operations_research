@@ -9,8 +9,8 @@ class Combine:
         self.y = point[1]
         self.field = field
         self.way = []
-        self.current_cells = 0
         self.extracted_cells = []
+        self.current_cells = 0
         self.in_shaft = False
         if i != -1:
             self.capacity = conf.combine_capacity[i]
@@ -39,16 +39,16 @@ class Combine:
         return rx, ry
 
     def find_way_to_nearest(self, cell_values):
+        nearest_cells = self.get_neighbor_cells()
+        nearest_cells = list(filter(lambda x: self.field[x[1]][x[0]] in cell_values, nearest_cells))
+        if len(nearest_cells):
+            return [choice(nearest_cells)]
         d = {}
         p = {}
         targets = set()
         seen = set()
         not_seen = set()
         search_list = [0, conf.shaft_const] + list(cell_values)
-        nearest_cells = self.get_neighbor_cells()
-        nearest_cells = list(filter(lambda x: self.field[x[1]][x[0]] in cell_values, nearest_cells))
-        if len(nearest_cells):
-            return [choice(nearest_cells)]
         for cell in self.get_neighbor_cells():
             if self.field[cell[1]][cell[0]] in search_list:
                 d[cell] = float('inf')
@@ -102,13 +102,15 @@ class Combine:
             return self.find_way_to_nearest([conf.shaft_const])
 
     def move(self):
+        if self.field[self.y][self.x] == conf.shaft_const and self.current_cells == self.capacity:
+            self.in_shaft = True
+            return
         if not self.way:
             self.way = self.get_way()
         cell = self.way[0]
         if self.field[cell[1]][cell[0]] == conf.busy_const:
             # TODO if deadlock
             return
-
         if self.field[self.y][self.x] == conf.busy_const:
             self.field[self.y][self.x] = 0
 
