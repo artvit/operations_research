@@ -17,10 +17,10 @@ combines_num = len(combines_shafts)
 
 factory_performance = 40
 warehouse1_capacity = 40
-warehouse2_capacity = 20000
+warehouse2_capacity = 20
 
 combine_move_cost = [3, 3, 4]
 salt_cost = 300
-combineres_salary = 30
-storing_cost = 10
-days = 1000
+combiners_salary = 30
+storing_cost = 1
+days = 900

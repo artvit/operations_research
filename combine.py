@@ -18,6 +18,7 @@ class Combine:
             self.speed = conf.combine_speed[i]
         self.moves = 0
         self.target_value = 0
+        self.day_expanses = 0
 
     def find_way_to_nearest(self, cell_values):
         nearest_cells = self.get_neighbor_cells()
@@ -99,6 +100,7 @@ class Combine:
 
         self.x, self.y = cell
         self.moves += 1
+        self.day_expanses += self.move_cost
 
         if self.field[self.y][self.x] == conf.target_const:
             self.extracted_cells[self.target_value] += 1
