@@ -20,11 +20,16 @@ class Combine:
         self.target_value = 0
         self.day_expanses = 0
 
-    def find_way_to_nearest(self, cell_values):
+    def easy_way(self, cell_values):
         nearest_cells = self.get_neighbor_cells()
         nearest_cells = list(filter(lambda x: self.field[x[1]][x[0]] in cell_values, nearest_cells))
         if len(nearest_cells):
-            return [choice(nearest_cells)]
+            return choice(nearest_cells)
+
+    def find_way_to_nearest(self, cell_values):
+        near_cell = self.easy_way(cell_values)
+        if near_cell:
+            return [near_cell]
         d = {}
         p = {}
         targets = set()
@@ -42,12 +47,13 @@ class Combine:
             v = min(not_seen, key=d.get)
             not_seen.remove(v)
             seen.add(v)
-            for cell in self.get_neighbor_cells(v):
+            v_neighbors = self.get_neighbor_cells(v)
+            for cell in v_neighbors:
                 if self.field[cell[1]][cell[0]] in search_list and cell not in seen:
                     if cell not in d:
                         d[cell] = float('inf')
                     not_seen.add(cell)
-            for cell in filter(lambda x: x in not_seen, self.get_neighbor_cells(v)):
+            for cell in filter(lambda x: x in not_seen, v_neighbors):
                 if d[cell] > d[v] + self.move_cost:
                     d[cell] = d[v] + self.move_cost
                     p[cell] = p[v] + [cell]

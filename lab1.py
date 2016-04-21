@@ -22,8 +22,8 @@ def init():
 def main():
     init()
     money = []
-    plt.figure()
-    image = plt.imshow(field, interpolation='none')
+    # plt.figure()
+    # image = plt.imshow(field, interpolation='none')
     for day in range(conf.days):
         for i in range(conf.combines_max_speed):
             for combine in combines:
@@ -31,9 +31,9 @@ def main():
                     combine.move()
                     if combine.in_shaft:
                         factory.handle(combine)
-        image.set_array(field)
-        plt.draw()
-        plt.pause(.00001)
+        # image.set_array(field)
+        # plt.draw()
+        # plt.pause(.00001)
         for combine in combines:
             combine.moves = 0
         factory.complete_salt = 0
