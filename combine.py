@@ -11,35 +11,13 @@ class Combine:
         self.field = field
         self.way = []
         self.extracted_cells = Counter()
-        self.current_cells = 0
         self.in_shaft = False
         if i != -1:
             self.capacity = conf.combine_capacity[i]
             self.move_cost = conf.combine_move_cost[i]
             self.speed = conf.combine_speed[i]
         self.moves = 0
-
-    def find_nearest_available(self):
-        rx, ry = -1, -1
-        k = 1
-        not_found = True
-        while not_found:
-            for i in range(2 * k + 1):
-                if self.field[self.y - k][self.x - k + i] in [20, 50, 80]:
-                    rx, ry = self.y - k, self.x - k + i
-                    not_found = False
-                if self.field[self.y + k][self.x - k + i] in [20, 50, 80]:
-                    rx, ry = self.y + k, self.x - k + i
-                    not_found = False
-            for i in range(2 * k - 1):
-                if self.field[self.y - k + 1 + i][self.x - k] in [20, 50, 80]:
-                    rx, ry = self.y - k + 1 + i, self.x - k
-                    not_found = False
-                if self.field[self.y - k + 1 + i][self.x + k] in [20, 50, 80]:
-                    rx, ry = self.y - k + 1 + i, self.x + k
-                    not_found = False
-            k += 1
-        return rx, ry
+        self.target_value = 0
 
     def find_way_to_nearest(self, cell_values):
         nearest_cells = self.get_neighbor_cells()
@@ -99,20 +77,23 @@ class Combine:
         if self.current_cells < self.capacity:
             way = self.find_way_to_nearest([20, 50, 80])
             cell = way[-1]
+            self.target_value = self.field[cell[1]][cell[0]]
             self.field[cell[1]][cell[0]] = conf.target_const
             return way
         else:
             return self.find_way_to_nearest([conf.shaft_const])
 
     def move(self):
+        if self.in_shaft:
+            return
         if self.moves >= self.speed:
             return
+
         if not self.way:
             self.way = self.get_way()
+
         cell = self.way[0]
-        if self.field[cell[1]][cell[0]] == conf.busy_const:
-            # TODO if deadlock
-            return
+
         if self.field[self.y][self.x] == conf.busy_const:
             self.field[self.y][self.x] = 0
 
@@ -120,13 +101,30 @@ class Combine:
         self.moves += 1
 
         if self.field[self.y][self.x] == conf.target_const:
-            self.extracted_cells[self.field[self.y][self.x]] += 1
-            self.current_cells += 1
+            self.extracted_cells[self.target_value] += 1
             self.field[self.y][self.x] = conf.busy_const
         elif self.field[self.y][self.x] == 0:
             self.field[self.y][self.x] = conf.busy_const
         self.way.pop(0)
-
         if self.field[self.y][self.x] == conf.shaft_const and self.current_cells == self.capacity:
             self.in_shaft = True
-            return
+
+    @property
+    def current_cells(self):
+        return sum(self.extracted_cells.values())
+
+    def remove(self, value, amt):
+        assert amt <= self.extracted_cells[value]
+        self.extracted_cells[value] -= amt
+
+    @property
+    def ore20(self):
+        return self.extracted_cells[20]
+
+    @property
+    def ore50(self):
+        return self.extracted_cells[50]
+
+    @property
+    def ore80(self):
+        return self.extracted_cells[80]

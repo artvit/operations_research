@@ -3,14 +3,17 @@ import matplotlib.pyplot as plt
 import fieldgen
 import conf
 from combine import *
+from factory import Factory
 
 
-combines = []
 field = None
+factory = None
+combines = []
 
 
 def init():
     global field, combines
+    factory = Factory()
     field = fieldgen.get_field()
     for i in range(conf.combines_num):
         combines.append(Combine(conf.shafts[conf.combines_shafts[i]], field, i))
@@ -18,6 +21,7 @@ def init():
 
 def main():
     init()
+    money = []
     for _ in range(conf.days):
         for i in range(conf.combines_max_speed):
             for combine in combines:

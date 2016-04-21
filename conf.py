@@ -10,16 +10,17 @@ shafts = [
 ]
 
 combines_shafts = [0, 2, 0]
-combine_capacity = [5, 6, 3]
-combine_speed = [10, 40, 20]
+combine_capacity = [4, 4, 3]
+combine_speed = [20, 24, 22]
 combines_max_speed = max(combine_speed)
 combines_num = len(combines_shafts)
 
-factory_performance = 20
+factory_performance = 40
 warehouse1_capacity = 40
 warehouse2_capacity = 20000
 
-combine_move_cost = [40, 20, 30]
+combine_move_cost = [3, 3, 4]
 salt_cost = 300
+combineres_salary = 30
 storing_cost = 10
 days = 1000
