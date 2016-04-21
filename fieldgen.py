@@ -49,7 +49,7 @@ def add_mask(field: np.ndarray):
 def add_shafts(field: np.ndarray):
     t_field = field.copy()
     for shaft in conf.shafts:
-        t_field[shaft[0], shaft[1]] = shaft_const
+        t_field[shaft[1], shaft[0]] = shaft_const
     return t_field
 
 

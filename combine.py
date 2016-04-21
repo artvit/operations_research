@@ -1,4 +1,5 @@
 from random import choice
+from collections import Counter
 
 import conf
 
@@ -9,12 +10,14 @@ class Combine:
         self.y = point[1]
         self.field = field
         self.way = []
-        self.extracted_cells = []
+        self.extracted_cells = Counter()
         self.current_cells = 0
         self.in_shaft = False
         if i != -1:
             self.capacity = conf.combine_capacity[i]
             self.move_cost = conf.combine_move_cost[i]
+            self.speed = conf.combine_speed[i]
+        self.moves = 0
 
     def find_nearest_available(self):
         rx, ry = -1, -1
@@ -102,8 +105,7 @@ class Combine:
             return self.find_way_to_nearest([conf.shaft_const])
 
     def move(self):
-        if self.field[self.y][self.x] == conf.shaft_const and self.current_cells == self.capacity:
-            self.in_shaft = True
+        if self.moves >= self.speed:
             return
         if not self.way:
             self.way = self.get_way()
@@ -115,11 +117,16 @@ class Combine:
             self.field[self.y][self.x] = 0
 
         self.x, self.y = cell
+        self.moves += 1
 
         if self.field[self.y][self.x] == conf.target_const:
-            self.extracted_cells.append(self.field[self.y][self.x])
+            self.extracted_cells[self.field[self.y][self.x]] += 1
             self.current_cells += 1
             self.field[self.y][self.x] = conf.busy_const
         elif self.field[self.y][self.x] == 0:
             self.field[self.y][self.x] = conf.busy_const
         self.way.pop(0)
+
+        if self.field[self.y][self.x] == conf.shaft_const and self.current_cells == self.capacity:
+            self.in_shaft = True
+            return
