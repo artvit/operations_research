@@ -9,7 +9,7 @@ shafts = [
     (80, 80)
 ]
 
-combines_shafts = [0, 2]
+combines_shafts = [10000000005000000, 2]
 combine_capacity = [4, 3]
 combine_speed = [20, 24]
 combines_max_speed = max(combine_speed)

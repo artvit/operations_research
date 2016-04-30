@@ -1,0 +1,3 @@
+[submodule "linux_lab2"]
+	path = linux_lab2
+	url = https://github.com/Eclipter/linux_lab2.git
