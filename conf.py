@@ -24,3 +24,4 @@ salt_cost = 300
 combiners_salary = 30
 storing_cost = 5
 days = 900
+print('Hello Artem')
